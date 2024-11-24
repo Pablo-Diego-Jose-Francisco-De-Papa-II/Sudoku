@@ -1,6 +1,6 @@
 public class Solver {
     // Overí, či sa číslo nachádza v danom riadku.
-    private boolean isNumberInRow(Grid grid, int value, int row) {
+    public boolean isNumberInRow(Grid grid, int value, int row) {
         for (int index = 0; index < 9; index++) {
             if (value == grid.getPlayersWholeSudoku()[row][index]) {
                 return true; // Nachádza sa.
@@ -11,7 +11,7 @@ public class Solver {
     }
 
     // Overí, či sa číslo nachádza v danom stĺpci.
-    private boolean isNumberInColumn(Grid grid, int value, int col) {
+    public boolean isNumberInColumn(Grid grid, int value, int col) {
         for (int index = 0; index < 9; index++) {
             if (value == grid.getPlayersWholeSudoku()[index][col]) {
                 return true; // Nachádza sa.
@@ -22,7 +22,7 @@ public class Solver {
     }
 
     // Overí, či sa číslo nachádza v danom bloku.
-    private boolean isNumberInBox(Grid grid, int value, int row, int col) {
+    public boolean isNumberInBox(Grid grid, int value, int row, int col) {
         int[][] playersSudoku = grid.getPlayersWholeSudoku();
         int x = (row / 3) * 3; // Začiatok bloku v riadku.
         int y = (col / 3) * 3; // Začiatok blocu v stĺpci.
@@ -39,13 +39,13 @@ public class Solver {
         return false; // Nenachádza sa v bloku.
     }
 
-    private boolean isValid(Grid grid, int value, int row, int col) {
+    public boolean isValid(Grid grid, int value, int row, int col) {
         return !isNumberInRow(grid, value, row) &&
                 !isNumberInColumn(grid, value, col) &&
                 !isNumberInBox(grid, value, row, col);
     }
 
-    private void solve(Grid grid, int value, int row, int col) {
+    public void solve(Grid grid, int value, int row, int col) {
 
     }
 
