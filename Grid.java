@@ -24,19 +24,40 @@ public class Grid {
     };
 
     public int getCorrectValue(int row, int col) {
-        return solvedSudoku[row][col];
+        return this.solvedSudoku[row][col];
     }
 
     public int getPlayersValue(int row, int col) {
-        return playersSudoku[row][col];
+        return this.playersSudoku[row][col];
     }
 
-    public int[][] getPlayersWholeSudoku() {
-        return playersSudoku;
+    public int[][] getPlayersSudoku() {
+        return this.playersSudoku;
+    }
+
+    public int[][] getSolvedSudoku() {
+        return this.solvedSudoku;
+    }
+
+    public void printSudoku(int[][] sudoku) {
+        for (int row = 0; row < sudoku.length; row++) {
+            for (int col = 0; col < sudoku[row].length; col++) {
+                System.out.print(sudoku[row][col] + " ");
+            }
+            System.out.println();
+        }
     }
 
     public static void main(String[] args) {
-        Grid idk = new Grid();
-        System.out.println(idk.getCorrectValue(1,8));
+        Grid grid = new Grid();
+        Solver solver = new Solver();
+
+        // Výpis výsledku
+        if (solver.solve(grid)) {
+            System.out.println("Sudoku bolo úspešne vyriešené:");
+            grid.printSudoku(grid.playersSudoku);
+        } else {
+            System.out.println("Sudoku sa nepodarilo vyriešiť.");
+        }
     }
 }

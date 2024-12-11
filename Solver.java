@@ -2,7 +2,7 @@ public class Solver {
     // Overí, či sa číslo nachádza v danom riadku.
     private boolean isNumberInRow(Grid grid, int value, int row) {
         for (int index = 0; index < 9; index++) {
-            if (value == grid.getPlayersWholeSudoku()[row][index]) {
+            if (value == grid.getPlayersSudoku()[row][index]) {
                 return true; // Nachádza sa.
             }
         }
@@ -13,7 +13,7 @@ public class Solver {
     // Overí, či sa číslo nachádza v danom stĺpci.
     private boolean isNumberInColumn(Grid grid, int value, int col) {
         for (int index = 0; index < 9; index++) {
-            if (value == grid.getPlayersWholeSudoku()[index][col]) {
+            if (value == grid.getPlayersSudoku()[index][col]) {
                 return true; // Nachádza sa.
             }
         }
@@ -23,7 +23,7 @@ public class Solver {
 
     // Overí, či sa číslo nachádza v danom bloku.
     private boolean isNumberInBox(Grid grid, int value, int row, int col) {
-        int[][] playersSudoku = grid.getPlayersWholeSudoku();
+        int[][] playersSudoku = grid.getPlayersSudoku();
         int x = (row / 3) * 3; // Začiatok bloku v riadku.
         int y = (col / 3) * 3; // Začiatok blocu v stĺpci.
 
@@ -39,22 +39,36 @@ public class Solver {
         return false; // Nenachádza sa v bloku.
     }
 
-    private boolean isValid(Grid grid, int value, int row, int col) {
+    public boolean isValid(Grid grid, int value, int row, int col) {
         return !isNumberInRow(grid, value, row) &&
                 !isNumberInColumn(grid, value, col) &&
                 !isNumberInBox(grid, value, row, col);
     }
 
-    private void solve(Grid grid, int value, int row, int col) {
+    public boolean solve(Grid grid) {
+       int[][] playersSudoku = grid.getPlayersSudoku();
 
-    }
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                if (playersSudoku[row][col] == 0) {
+                    for (int value = 1; value <= 9; value++) {
+                        if (isValid(grid, value, row, col)) {
+                            playersSudoku[row][col] = value;
 
+                            grid.printSudoku(playersSudoku);
+                            System.out.println("\n");
 
+                            if (solve(grid)) {
+                                return true;
+                            }
 
-    public static void main(String[] args) {
-        Grid grid = new Grid();
-        Solver idk = new Solver();
-
-        System.out.println(idk.isValid(grid, 9, 1, 1));
+                            playersSudoku[row][col] = 0;
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
