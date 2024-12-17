@@ -1,4 +1,5 @@
 public class Grid {
+    //int[][] solvedSudoku;
     int[][] solvedSudoku = {
             {5, 3, 4, 6, 7, 8, 9, 1, 2},
             {6, 7, 2, 1, 9, 5, 3, 4, 8},
@@ -9,7 +10,7 @@ public class Grid {
             {9, 6, 1, 5, 3, 7, 2, 8, 4},
             {2, 8, 7, 4, 1, 9, 6, 3, 5},
             {3, 4, 5, 2, 8, 6, 1, 7, 9}
-    };
+    };/*
 
     int[][] playersSudoku = {
             {5, 0, 0, 0, 7, 0, 0, 1, 0},
@@ -21,7 +22,20 @@ public class Grid {
             {0, 6, 0, 5, 0, 0, 2, 0, 0},
             {0, 0, 7, 0, 0, 9, 0, 3, 0},
             {0, 4, 0, 0, 8, 0, 0, 0, 9}
+    };*/
+
+    int[][] playersSudoku = {
+            {1, 2, 3, 4, 5, 6, 7, 8, 9},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
     };
+
 
     public int getCorrectValue(int row, int col) {
         return this.solvedSudoku[row][col];
@@ -50,7 +64,7 @@ public class Grid {
 
     public static void main(String[] args) {
         Grid grid = new Grid();
-        Solver solver = new Solver();
+        Solver solver = new Solver(grid);
 
         // Výpis výsledku
         if (solver.solve(grid)) {
