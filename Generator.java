@@ -1,23 +1,25 @@
+import java.util.Random;
+
 public class Generator {
     private final Grid grid;
-    private final int difficulty;
 
-    public Generator(Grid grid, int difficulty) {
+    public Generator(Grid grid) {
         this.grid = grid;
-        this.difficulty = difficulty;
     }
 
-    public int getDifficulty() {
-        return this.difficulty;
-    }
+    public void removeTiles(Difficulty difficulty) {
+        Random random = new Random();
+        int[][] playersSudoku = this.grid.getPlayersSudoku();
+        int count = difficulty.getRemoveTilesCount();
 
-    public void idk() {
-        int[] randomFirstLine = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        while (count > 0) {
+            int x = random.nextInt(9);
+            int y = random.nextInt(9);
 
-        grid.getSolvedSudoku();
-    }
-
-    public void removeCells(int difficulty) {
-
+            if (playersSudoku[x][y] != 0) {
+                playersSudoku[x][y] = 0;
+                count--;
+            }
+        }
     }
 }

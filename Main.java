@@ -2,7 +2,9 @@ public class Main {
     public static void main(String[] args) {
         Grid grid = new Grid();
         Solver solver = new Solver(grid);
+        Generator generator = new Generator(grid);
 
+        /*
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < 1; i++) {
             solver.solve(grid);
@@ -25,5 +27,14 @@ public class Main {
 
         long endTime = System.currentTimeMillis();
         System.out.println("Time taken: " + (endTime - startTime) + "ms");
+        */
+
+        solver.solve(grid.getPlayersSudoku());
+        grid.printSudoku(grid.getPlayersSudoku());
+
+        System.out.println();
+
+        generator.removeTiles(Difficulty.TEST);
+        grid.printSudoku(grid.getPlayersSudoku());
     }
 }

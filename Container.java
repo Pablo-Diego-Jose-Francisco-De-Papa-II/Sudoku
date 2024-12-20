@@ -2,13 +2,12 @@
  * Trieda Cointainer slúži na kontrolu pohybov v sudoku.
  * Obsahuje metódy na kontrolu prítomnosti čísla v riadku, stĺpci a bloku.
  */
-
 public class Container {
     private final Grid grid;
 
     /**
      * Vytvára nový Cointainer s referenciou na daný Grid.
-     * @param grid Grid reprezentujúci aktuálnu Sudoku mriežku.
+     * @param grid Grid reprezentujúci aktuálnu sudoku mriežku.
      */
     public Container(Grid grid) {
         this.grid = grid;
@@ -22,7 +21,7 @@ public class Container {
      */
     private boolean isNumberInRow(int value, int row) {
         for (int index = 0; index < 9; index++) {
-            if (value == grid.getPlayersSudoku()[row][index]) {
+            if (value == this.grid.getPlayersSudoku()[row][index]) {
                 return true; // Nachádza sa.
             }
         }
@@ -38,7 +37,7 @@ public class Container {
      */
     private boolean isNumberInColumn(int value, int col) {
         for (int index = 0; index < 9; index++) {
-            if (value == grid.getPlayersSudoku()[index][col]) {
+            if (value == this.grid.getPlayersSudoku()[index][col]) {
                 return true; // Nachádza sa.
             }
         }
@@ -54,14 +53,14 @@ public class Container {
      * @return true, ak sa hodnota nachádza v bloku, inak false.
      */
     private boolean isNumberInBox(int value, int row, int col) {
-        int[][] playersSudoku = grid.getPlayersSudoku();
-        int x = (row / 3) * 3; // Začiatok bloku v riadku.
-        int y = (col / 3) * 3; // Začiatok blocu v stĺpci.
+        int[][] playersSudoku = this.grid.getPlayersSudoku();
+        int startRow = (row / 3) * 3; // Začiatok bloku v riadku.
+        int startCol = (col / 3) * 3; // Začiatok blocu v stĺpci.
 
         // Prehladá 3x3 blok.
-        for (int col_index = 0; col_index < 3; col_index++) {
-            for (int row_index = 0; row_index < 3; row_index++) {
-                if (value == playersSudoku[x + col_index][y + row_index]) {
+        for (int r = startRow; r < startRow + 3; r++) {
+            for (int c = startCol; c < startCol + 3; c++) {
+                if (playersSudoku[r][c] == value) {
                     return true; // Nachádza sa.
                 }
             }
@@ -78,8 +77,8 @@ public class Container {
      * @return true, ak je hodnota validná, inak false.
      */
     public boolean isValid(int value, int row, int col) {
-        return !isNumberInRow(value, row) &&
-                !isNumberInColumn(value, col) &&
-                !isNumberInBox(value, row, col);
+        return !this.isNumberInRow(value, row) &&
+                !this.isNumberInColumn(value, col) &&
+                !this.isNumberInBox(value, row, col);
     }
 }
