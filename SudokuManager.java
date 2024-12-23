@@ -1,26 +1,29 @@
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
- * Trieda Solver rieši sudoku pomocou back-tracking algoritmu.
- * Obsahuje referencie na triedy Grid a Container, ktoré sú potrebné na validáciu a prácu s hráčskym sudoku.
+ * Trieda SudokuManager slúži na riešenie i generovanie mriežky sudoku.
+ * Obsahuje referencie na triedy Grid a Container, ktoré sú potrebné na validáciu a prácu s mriežkou sudoku.
  */
-public class Solver {
+public class SudokuManager  {
     private final Grid grid;
     private final Container container;
 
     /**
-     * Konštruktor triedy Solver.
-     * Inicializuje objekty Grid a Container.
+     * Konštruktor triedy SudokuManager, ktorý inicializuje objekty Grid a Container.
+     *
+     * @param grid Sudoku mriežka, s ktorou bude trieda pracovať.
      */
-    public Solver(Grid grid) {
+    public SudokuManager (Grid grid) {
         this.grid = grid;
         this.container = new Container(grid);
     }
 
     /**
      * Rieši sudoku pomocou back-tracking algoritmu.
+     *
      * @param grid sudoku grid, ktorý sa má vyriešiť.
      * @return true, ak sa podarilo sudoku úspešne doriešiť, inak false.
      */
@@ -54,5 +57,38 @@ public class Solver {
             }
         }
         return true; // Sudoku bolo úspešne vyriešené.
+    }
+
+    /**
+     * Odstráni zadaný počet políčok z mriežky na základe obtiažnosti.
+     *
+     * @param difficulty Obtiažnosť hry, ktoré určuje počet odtránených políčok.
+     */
+    public void removeTiles(Difficulty difficulty) {
+        Random random = new Random();
+        int[][] playersSudoku = this.grid.getPlayersSudoku();
+        int count = difficulty.getRemoveTilesCount();
+
+        while (count > 0) {
+            int x = random.nextInt(9);
+            int y = random.nextInt(9);
+
+            // Odstáni hodnotu v políčku ak jeho hodnota nie je 0.
+            if (playersSudoku[x][y] != 0) {
+                playersSudoku[x][y] = 0;
+                count--;
+            }
+        }
+    }
+
+    /**
+     * Generovanie sudoku mriežky
+     *
+     * @param playersSudoku Dvojrozmerné pole do ktorého sa vygeneruje sudoku pre hráča.
+     * @param difficulty Obtiaznosť hry, ktorá určuje počet odstránených políčok.
+     */
+    public void generateSudoku(int[][] playersSudoku, Difficulty difficulty) {
+        this.solve(playersSudoku); // Vygenerovanie vyriešeného sudoku.
+        this.removeTiles(difficulty); // Odstránenie n-počet políčok.
     }
 }

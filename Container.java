@@ -7,6 +7,7 @@ public class Container {
 
     /**
      * Vytvára nový Cointainer s referenciou na daný Grid.
+     *
      * @param grid Grid reprezentujúci aktuálnu sudoku mriežku.
      */
     public Container(Grid grid) {
@@ -15,6 +16,7 @@ public class Container {
 
     /**
      * Overí, či sa číslo nachádza v danom riadku.
+     *
      * @param value Kontrolovaná hodnota.
      * @param row Kontrolovaný riadok pre prítomnosť hodnoty.
      * @return true, ak sa hodnota nachádza v riadku, inak false.
@@ -31,6 +33,7 @@ public class Container {
 
     /**
      * Overí, či sa číslo nachádza v danom stĺpci.
+     *
      * @param value Kontrolovaná hodnota.
      * @param col Kontrolovaný stĺpec pre prítomnosť hodnoty.
      * @return true, ak sa hodnota nachádza v stĺpci, inak false.
@@ -47,6 +50,7 @@ public class Container {
 
     /**
      * Overí, či sa číslo nachádza v danom bloku.
+     *
      * @param value Kontrolovaná hodnota.
      * @param row Riadok, kde začína blok.
      * @param col Stĺpec, kde začína blok
@@ -71,6 +75,7 @@ public class Container {
 
     /**
      * Overí pomocou predošlých metód, či hodnota môže byť doplnená na to políčko.
+     *
      * @param value Kontrolovaná hodnota.
      * @param row Riadok, kde sa nachádza políčko.
      * @param col Stĺpec, kde sa nachádza políčko.
