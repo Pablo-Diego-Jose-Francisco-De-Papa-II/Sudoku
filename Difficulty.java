@@ -3,11 +3,10 @@
  * Každá úroveň obsahuje počet políčok, ktoré sa majú odstrániť a popis obtiažnosti.
  */
 public enum Difficulty {
-    TEST        (1,  "Test"),
     EASY        (30, "Ľahké"),
     MEDIUM      (45, "Stredné"),
     HARD        (50, "Ťažké"),
-    VERY_HARD   (55, "Veľmi ťažké");
+    TEST        (1,  "Test");
 
     private final int removeTilesCount;
     private final String description;

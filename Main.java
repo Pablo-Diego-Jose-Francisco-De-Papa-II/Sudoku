@@ -1,8 +1,7 @@
 public class Main {
     public static void main(String[] args) {
         Grid grid = new Grid();
-        Solver solver = new Solver(grid);
-        Generator generator = new Generator(grid);
+        SudokuManager  solver = new SudokuManager (grid);
 
         /*
         long startTime = System.currentTimeMillis();
@@ -29,12 +28,8 @@ public class Main {
         System.out.println("Time taken: " + (endTime - startTime) + "ms");
         */
 
-        solver.solve(grid.getPlayersSudoku());
-        grid.printSudoku(grid.getPlayersSudoku());
 
-        System.out.println();
-
-        generator.removeTiles(Difficulty.TEST);
+        solver.generateSudoku(grid.getPlayersSudoku(), Difficulty.HARD);
         grid.printSudoku(grid.getPlayersSudoku());
     }
 }

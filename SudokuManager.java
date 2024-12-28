@@ -24,7 +24,6 @@ public class SudokuManager  {
     /**
      * Rieši sudoku pomocou back-tracking algoritmu.
      *
-     * @param grid sudoku grid, ktorý sa má vyriešiť.
      * @return true, ak sa podarilo sudoku úspešne doriešiť, inak false.
      */
     public boolean solve(int[][] sudoku) {

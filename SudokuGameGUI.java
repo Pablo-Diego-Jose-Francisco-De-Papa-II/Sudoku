@@ -1,5 +1,5 @@
-import javax.swing.JFrame;
-import javax.swing.JButton;
+import javax.swing.*;
+import java.awt.*;
 
 public class SudokuGameGUI {
     public static void main(String[] args) {
@@ -8,8 +8,9 @@ public class SudokuGameGUI {
         frame.setSize(600, 750);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
-        frame.setVisible(true);
+        frame.setLayout(null);
 
+        // Tlačidlá na vrchu
         JButton hintButton = new JButton("HINT");
         hintButton.setBounds(10, 0, 134, 50);
         frame.add(hintButton);
@@ -26,8 +27,19 @@ public class SudokuGameGUI {
         leaderboardButton.setBounds(442, 0, 134, 50);
         frame.add(leaderboardButton);
 
+        // Sudoku mriežka
+        JPanel gridPanel = new JPanel(new GridLayout(9, 9));
+        gridPanel.setBounds(10, 60, 566, 566);
+        frame.add(gridPanel);
 
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                JPanel cell = getCell(row, col);
+                gridPanel.add(cell);
+            }
+        }
 
+        // Číselné tlačidlá dole
         int x = 10;
         int w = 48;
 
@@ -70,5 +82,18 @@ public class SudokuGameGUI {
         JButton xButton = new JButton("X");
         xButton.setBounds(x + (9 * (w + x)) - 4, 650, w, w);
         frame.add(xButton);
+
+        frame.setVisible(true);
+    }
+
+    private static JPanel getCell(int row, int col) {
+        JPanel cell = new JPanel();
+        cell.setBorder(BorderFactory.createMatteBorder(
+                row % 3 == 0 ? 3 : 1, // TOP
+                col % 3 == 0 ? 3 : 1, // LEFT
+                row % 3 == 2 ? 3 : 1, // BOTTOM
+                col % 3 == 2 ? 3 : 1, // RIGHT
+                Color.BLACK));
+        return cell;
     }
 }
