@@ -4,9 +4,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
+import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -15,6 +16,7 @@ import java.util.Random;
 public class SudokuGame {
     private static Grid grid;
     private static SudokuManager sudokuManager;
+    private static Leaderboard leaderboard;
 
     private int numberOfHints = 5;
 
@@ -22,6 +24,7 @@ public class SudokuGame {
         this.grid = grid;
         this.sudokuManager = new SudokuManager(grid);
         this.sudokuManager.generateSudoku(Difficulty.EASY);
+        this.leaderboard = new Leaderboard();
     }
 
     public static void main(String[] args) {
@@ -45,6 +48,7 @@ public class SudokuGame {
         hintButton.setFont(new Font("Arial", Font.BOLD, 15));
         hintButton.setBackground(Color.lightGray);
         hintButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+        hintButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         hintButton.setBounds(10, 0, 134, 50);
         frame.add(hintButton);
 
@@ -52,6 +56,7 @@ public class SudokuGame {
         solveButton.setFont(new Font("Arial", Font.BOLD, 15));
         solveButton.setBackground(Color.lightGray);
         solveButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+        solveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         solveButton.setBounds(154, 0, 134, 50);
         frame.add(solveButton);
 
@@ -59,6 +64,7 @@ public class SudokuGame {
         newGameButton.setFont(new Font("Arial", Font.BOLD, 15));
         newGameButton.setBackground(Color.lightGray);
         newGameButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+        newGameButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         newGameButton.setBounds(298, 0, 134, 50);
         frame.add(newGameButton);
 
@@ -66,6 +72,7 @@ public class SudokuGame {
         leaderboardButton.setFont(new Font("Arial", Font.BOLD, 15));
         leaderboardButton.setBackground(Color.lightGray);
         leaderboardButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+        leaderboardButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         leaderboardButton.setBounds(442, 0, 134, 50);
         frame.add(leaderboardButton);
 
@@ -154,20 +161,24 @@ public class SudokuGame {
     private void getHint() {
         Random random = new Random();
 
-        if (this.numberOfHints > 0) {
-            while (true) {
-                int x = random.nextInt(9);
-                int y = random.nextInt(9);
+        if (this.numberOfHints <= 0) {
+            System.out.println("Out of hints!");
+            return;
+        }
 
-                if (grid.getPlayersSudoku()[x][y] == 0) {
-                    grid.getPlayersSudoku()[x][y] = grid.getSolvedSudoku()[x][y];
-                    this.numberOfHints--;
-                    return;
-                }
+        while (this.numberOfHints > 0) {
+            int x = random.nextInt(9);
+            int y = random.nextInt(9);
 
-                if (Arrays.deepEquals(grid.getPlayersSudoku(), grid.getSolvedSudoku())) {
-                    return;
-                }
+            if (grid.getPlayersSudoku()[x][y] == 0) {
+                grid.getPlayersSudoku()[x][y] = grid.getSolvedSudoku()[x][y];
+                this.numberOfHints--;
+                System.out.println("Hint provided. " + this.numberOfHints + " hints left.");
+                return;
+            }
+
+            if (Arrays.deepEquals(grid.getPlayersSudoku(), grid.getSolvedSudoku())) {
+                return;
             }
         }
     }
@@ -177,7 +188,6 @@ public class SudokuGame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 SudokuGame.this.getHint();
-                System.out.println("Hint provided.");
             }
         });
 
@@ -185,7 +195,6 @@ public class SudokuGame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 sudokuManager.solve(grid.getPlayersSudoku());
-                System.out.println("Sudoku solved.");
             }
         });
 
@@ -199,7 +208,7 @@ public class SudokuGame {
         leaderboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Displaying leaderboard...");
+                leaderboard.setUpGUI();
             }
         });
     }

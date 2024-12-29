@@ -3,9 +3,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class Leaderboard {
-    public static void main(String[] args) {
+    public void setUpGUI() {
         JFrame frame = new JFrame("Leaderboard :3");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 420);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
@@ -46,16 +45,13 @@ public class Leaderboard {
         testButton.setBounds(291, 60, 84, 30); // 375
         frame.add(testButton);
 
-        // Vytvorenie modelu tabuľky
         String[] columns = {"#", "Name", "Time"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
 
-        // Vytvorenie tabuľky s modelom
         JTable table = new JTable(tableModel);
         table.setFont(new Font("Arial", Font.PLAIN, 12));
         table.setRowHeight(25);
 
-        // Pridanie dát do tabuľky
         tableModel.addRow(new Object[]{1, "Player 1", "1:30"});
         tableModel.addRow(new Object[]{2, "Player 2", "2:00"});
         tableModel.addRow(new Object[]{3, "Player 3", "2:30"});
@@ -68,9 +64,8 @@ public class Leaderboard {
         tableModel.addRow(new Object[]{10, "Player 3", "2:30"});
 
 
-        // Umiestnenie tabuľky do JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(10, 100, 365, 275); // Nastavujeme pozíciu a veľkosť
+        scrollPane.setBounds(10, 100, 365, 273);
         frame.add(scrollPane);
 
         frame.setVisible(true);
