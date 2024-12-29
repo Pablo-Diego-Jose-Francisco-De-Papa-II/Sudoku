@@ -28,8 +28,10 @@ public class Main {
         System.out.println("Time taken: " + (endTime - startTime) + "ms");
         */
 
+        solver.generateSudoku(Difficulty.HARD);
 
-        solver.generateSudoku(grid.getPlayersSudoku(), Difficulty.HARD);
+        grid.printSudoku(grid.getSolvedSudoku());
+        System.out.println();
         grid.printSudoku(grid.getPlayersSudoku());
     }
 }
