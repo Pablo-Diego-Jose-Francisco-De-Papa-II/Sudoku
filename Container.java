@@ -23,7 +23,7 @@ public class Container {
      */
     private boolean isNumberInRow(int value, int row) {
         for (int index = 0; index < 9; index++) {
-            if (value == this.grid.getPlayersSudoku()[row][index]) {
+            if (value == this.grid.getPlayersValue(row, index)) {
                 return true; // Nachádza sa.
             }
         }
@@ -40,7 +40,7 @@ public class Container {
      */
     private boolean isNumberInColumn(int value, int col) {
         for (int index = 0; index < 9; index++) {
-            if (value == this.grid.getPlayersSudoku()[index][col]) {
+            if (value == this.grid.getPlayersValue(index, col)) {
                 return true; // Nachádza sa.
             }
         }
@@ -57,14 +57,13 @@ public class Container {
      * @return true, ak sa hodnota nachádza v bloku, inak false.
      */
     private boolean isNumberInBox(int value, int row, int col) {
-        int[][] playersSudoku = this.grid.getPlayersSudoku();
         int startRow = (row / 3) * 3; // Začiatok bloku v riadku.
         int startCol = (col / 3) * 3; // Začiatok blocu v stĺpci.
 
         // Prehladá 3x3 blok.
         for (int r = startRow; r < startRow + 3; r++) {
             for (int c = startCol; c < startCol + 3; c++) {
-                if (playersSudoku[r][c] == value) {
+                if (this.grid.getPlayersValue(r, c) == value) {
                     return true; // Nachádza sa.
                 }
             }

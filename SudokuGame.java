@@ -15,8 +15,8 @@ import java.awt.GridLayout;
 import javax.swing.SwingConstants;
 import javax.swing.JOptionPane;
 import java.awt.Component;
-
-
+import javax.swing.JPopupMenu;
+import javax.swing.JMenuItem;
 
 public class SudokuGame {
     private static Grid grid;
@@ -36,8 +36,7 @@ public class SudokuGame {
     }
 
     public static void main(String[] args) {
-        grid = new Grid();
-        SudokuGame game = new SudokuGame(grid);
+        SudokuGame game = new SudokuGame(new Grid());
         game.setUpGUI();
     }
 
@@ -74,6 +73,28 @@ public class SudokuGame {
         newGameButton.setBounds(298, 0, 134, 50);
         frame.add(newGameButton);
 
+        JPopupMenu difficultyMenu = new JPopupMenu();
+        difficultyMenu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        difficultyMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        JMenuItem easyItem = new JMenuItem("EASY");
+        difficultyMenu.add(easyItem);
+        easyItem.addActionListener(e -> startNewGame(Difficulty.EASY));
+
+        JMenuItem mediumItem = new JMenuItem("MEDIUM");
+        difficultyMenu.add(mediumItem);
+        mediumItem.addActionListener(e -> startNewGame(Difficulty.MEDIUM));
+
+        JMenuItem hardItem = new JMenuItem("HARD");
+        difficultyMenu.add(hardItem);
+        hardItem.addActionListener(e -> startNewGame(Difficulty.HARD));
+
+        JMenuItem testItem = new JMenuItem("TEST");
+        difficultyMenu.add(testItem);
+        testItem.addActionListener(e -> startNewGame(Difficulty.TEST));
+
+
+
         JButton leaderboardButton = new JButton("LEADERBOARD");
         leaderboardButton.setFont(new Font("Arial", Font.BOLD, 15));
         leaderboardButton.setBackground(Color.lightGray);
@@ -89,16 +110,23 @@ public class SudokuGame {
 
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
-                JTextField cell = this.getCell(row, col, grid.getPlayersSudoku()[row][col]);
+                JTextField cell = this.createCell(row, col, grid.getPlayersSudoku()[row][col]);
                 this.gridPanel.add(cell);
             }
         }
 
-        this.setUpButtonListeners(hintButton, solveButton, newGameButton, leaderboardButton);
+        this.setUpButtonListeners(hintButton, solveButton, newGameButton, leaderboardButton, difficultyMenu);
         frame.setVisible(true);
     }
 
-    private JTextField getCell(int row, int col, int value) {
+    private void startNewGame(Difficulty difficulty) {
+        this.numberOfHints = 5;
+        sudokuManager.generateSudoku(difficulty);
+        refreshGUI(gridPanel);
+        JOptionPane.showMessageDialog(null, "New game generated! \nDifficulty: " + difficulty);
+    }
+
+    private JTextField createCell(int row, int col, int value) {
         JTextField cell = new JTextField();
         cell.setHorizontalAlignment(SwingConstants.CENTER);
         cell.setFont(new Font("Arial", Font.BOLD, 30));
@@ -193,6 +221,7 @@ public class SudokuGame {
                 if (value != 0) {
                     cell.setText(String.valueOf(value));
 
+
                 } else {
                     cell.setText("");
                     cell.setEditable(true);
@@ -202,9 +231,8 @@ public class SudokuGame {
         }
     }
 
-    public void setUpButtonListeners(JButton hintButton, JButton solveButton, JButton newGameButton, JButton leaderboardButton) {
+    public void setUpButtonListeners(JButton hintButton, JButton solveButton, JButton newGameButton, JButton leaderboardButton, JPopupMenu difficultyMenu) {
         hintButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ae) {
                 SudokuGame.this.getHint();
                 SudokuGame.this.refreshGUI(SudokuGame.this.gridPanel);
@@ -212,27 +240,14 @@ public class SudokuGame {
         });
 
         solveButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ae) {
                 sudokuManager.solve(grid.getPlayersSudoku());
                 SudokuGame.this.refreshGUI(SudokuGame.this.gridPanel);
             }
         });
 
-        newGameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                sudokuManager.generateSudoku(Difficulty.EASY);
-                SudokuGame.this.refreshGUI(SudokuGame.this.gridPanel);
-                JOptionPane.showMessageDialog(null, "New game has been generated!");
-            }
-        });
+        newGameButton.addActionListener(ae -> difficultyMenu.show(newGameButton, 0, newGameButton.getHeight()));
 
-        leaderboardButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                leaderboard.setUpGUI();
-            }
-        });
+        leaderboardButton.addActionListener(ae -> leaderboard.setUpGUI());
     }
 }
