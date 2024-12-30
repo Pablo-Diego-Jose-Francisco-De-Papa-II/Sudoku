@@ -1,30 +1,38 @@
-import javax.swing.JFrame;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.BorderFactory;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Color;
+import javax.swing.border.Border;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Random;
+import java.awt.Font;
+import java.awt.Color;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.BorderFactory;
+import java.awt.Cursor;
+import javax.swing.JTextField;
+import java.awt.GridLayout;
+import javax.swing.SwingConstants;
+import javax.swing.JOptionPane;
+import java.awt.Component;
+
+
 
 public class SudokuGame {
     private static Grid grid;
     private static SudokuManager sudokuManager;
     private static Leaderboard leaderboard;
+    private static VictoryScreen victoryScreen;
 
+    private JPanel gridPanel;
     private int numberOfHints = 5;
 
     public SudokuGame(Grid grid) {
-        this.grid = grid;
-        this.sudokuManager = new SudokuManager(grid);
-        this.sudokuManager.generateSudoku(Difficulty.EASY);
-        this.leaderboard = new Leaderboard();
+        SudokuGame.grid = grid;
+        SudokuGame.sudokuManager = new SudokuManager(grid);
+        SudokuGame.sudokuManager.generateSudoku(Difficulty.EASY);
+        SudokuGame.leaderboard = new Leaderboard();
+        SudokuGame.victoryScreen = new VictoryScreen();
     }
 
     public static void main(String[] args) {
@@ -34,11 +42,9 @@ public class SudokuGame {
     }
 
     public void setUpGUI() {
-        SudokuGame idk = new SudokuGame(new Grid());
-
         JFrame frame = new JFrame("Sudoku :3");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 750);
+        frame.setSize(600, 675);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setLayout(null);
@@ -77,92 +83,79 @@ public class SudokuGame {
         frame.add(leaderboardButton);
 
         // Sudoku mriežka
-        JPanel gridPanel = new JPanel(new GridLayout(9, 9));
-        gridPanel.setBounds(10, 60, 566, 566);
-        frame.add(gridPanel);
+        this.gridPanel = new JPanel(new GridLayout(9, 9));
+        this.gridPanel.setBounds(10, 60, 566, 566);
+        frame.add(this.gridPanel);
 
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
-                JTextField cell = getCell(row, col, grid.getPlayersSudoku()[row][col]);
-                gridPanel.add(cell);
+                JTextField cell = this.getCell(row, col, grid.getPlayersSudoku()[row][col]);
+                this.gridPanel.add(cell);
             }
         }
 
-        // Číselné tlačidlá dole
-        int x = 10;
-        int w = 48;
-
-        JButton oneButton = new JButton("1");
-        oneButton.setBounds(x, 650, w, w);
-        frame.add(oneButton);
-
-        JButton twoButton = new JButton("2");
-        twoButton.setBounds(x + w + x, 650, w, w);
-        frame.add(twoButton);
-
-        JButton threeButton = new JButton("3");
-        threeButton.setBounds(x + (2 * (w + x)), 650, w, w);
-        frame.add(threeButton);
-
-        JButton fourButton = new JButton("4");
-        fourButton.setBounds(x + (3 * (w + x)), 650, w, w);
-        frame.add(fourButton);
-
-        JButton fiveButton = new JButton("5");
-        fiveButton.setBounds(x + (4 * (w + x)), 650, w, w);
-        frame.add(fiveButton);
-
-        JButton sixButton = new JButton("6");
-        sixButton.setBounds(x + (5 * (w + x)), 650, w, w);
-        frame.add(sixButton);
-
-        JButton sevenButton = new JButton("7");
-        sevenButton.setBounds(x + (6 * (w + x)) - 1, 650, w, w);
-        frame.add(sevenButton);
-
-        JButton eightButton = new JButton("8");
-        eightButton.setBounds(x + (7 * (w + x)) - 2, 650, w, w);
-        frame.add(eightButton);
-
-        JButton nineButton = new JButton("9");
-        nineButton.setBounds(x + (8 * (w + x)) - 3, 650, w, w);
-        frame.add(nineButton);
-
-        JButton xButton = new JButton("X");
-        xButton.setBounds(x + (9 * (w + x)) - 4, 650, w, w);
-        frame.add(xButton);
-
         this.setUpButtonListeners(hintButton, solveButton, newGameButton, leaderboardButton);
-
         frame.setVisible(true);
     }
 
-    private static JTextField getCell(int row, int col, int value) {
+    private JTextField getCell(int row, int col, int value) {
         JTextField cell = new JTextField();
         cell.setHorizontalAlignment(SwingConstants.CENTER);
         cell.setFont(new Font("Arial", Font.BOLD, 30));
-        cell.setBorder(BorderFactory.createMatteBorder(
-                row % 3 == 0 ? 3 : 1, // TOP
-                col % 3 == 0 ? 3 : 1, // LEFT
-                row % 3 == 2 ? 3 : 1, // BOTTOM
-                col % 3 == 2 ? 3 : 1, // RIGHT
-                Color.BLACK
-        ));
+        cell.setBorder(this.createCellBorder(row, col));
 
         if (value != 0) {
             cell.setText(String.valueOf(value));
             cell.setBackground(Color.lightGray);
             cell.setEditable(false);
+        } else {
+            cell.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    try {
+                        int input = Integer.parseInt(cell.getText());
+                        SudokuGame.this.validatePlacement(row, col, input, cell);
+
+                    } catch (Exception e) {
+                        cell.setText("");
+                        cell.setBackground(Color.WHITE);
+                    }
+                }
+            });
         }
 
         return cell;
+    }
+
+    private Border createCellBorder(int row, int col) {
+        return BorderFactory.createMatteBorder(
+                row % 3 == 0 ? 3 : 1, // TOP
+                col % 3 == 0 ? 3 : 1, // LEFT
+                row % 3 == 2 ? 3 : 1, // BOTTOM
+                col % 3 == 2 ? 3 : 1, // RIGHT
+                Color.BLACK
+        );
+    }
+
+    public void validatePlacement(int row, int col, int input, JTextField cell) {
+        grid.getPlayersSudoku()[row][col] = input;
+
+        if (grid.getSolvedSudoku()[row][col] == input)  {
+            cell.setBackground(Color.WHITE);
+        } else {
+            cell.setBackground(Color.RED);
+        }
+
+        if (this.isSolved()) {
+            victoryScreen.setUpGui();
+        }
     }
 
     private void getHint() {
         Random random = new Random();
 
         if (this.numberOfHints <= 0) {
-            System.out.println("Out of hints!");
+            JOptionPane.showMessageDialog(null, "Out of hints!");
             return;
         }
 
@@ -177,8 +170,34 @@ public class SudokuGame {
                 return;
             }
 
-            if (Arrays.deepEquals(grid.getPlayersSudoku(), grid.getSolvedSudoku())) {
+            if (this.isSolved()) {
+                JOptionPane.showMessageDialog(null, "Sudoku is already solved!");
                 return;
+            }
+        }
+    }
+    private boolean isSolved() {
+        return Arrays.deepEquals(grid.getPlayersSudoku(), grid.getSolvedSudoku());
+    }
+
+    private void refreshGUI(JPanel gridPanel) {
+        Component[] components = gridPanel.getComponents();
+
+        for (int i = 0; i < components.length; i++) {
+            if (components[i] instanceof JTextField) {
+                JTextField cell = (JTextField)components[i];
+                int row = i / 9;
+                int col = i % 9;
+                int value = grid.getPlayersSudoku()[row][col];
+
+                if (value != 0) {
+                    cell.setText(String.valueOf(value));
+
+                } else {
+                    cell.setText("");
+                    cell.setEditable(true);
+                    cell.setBackground(Color.WHITE);
+                }
             }
         }
     }
@@ -188,6 +207,7 @@ public class SudokuGame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 SudokuGame.this.getHint();
+                SudokuGame.this.refreshGUI(SudokuGame.this.gridPanel);
             }
         });
 
@@ -195,13 +215,16 @@ public class SudokuGame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 sudokuManager.solve(grid.getPlayersSudoku());
+                SudokuGame.this.refreshGUI(SudokuGame.this.gridPanel);
             }
         });
 
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("New game generated.");
+                sudokuManager.generateSudoku(Difficulty.EASY);
+                SudokuGame.this.refreshGUI(SudokuGame.this.gridPanel);
+                JOptionPane.showMessageDialog(null, "New game has been generated!");
             }
         });
 

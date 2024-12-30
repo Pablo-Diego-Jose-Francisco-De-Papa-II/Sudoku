@@ -1,10 +1,23 @@
-import javax.swing.*;
-import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.Font;
+import java.awt.Color;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.BorderFactory;
+import java.awt.Cursor;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
 
 public class VictoryScreen {
-    public static void main(String[] args) {
+    private final Player player;
+
+    public VictoryScreen() {
+        this.player = new Player();
+    }
+
+    public void setUpGui() {
         JFrame frame = new JFrame("YOU WON! :3");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 175);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
@@ -35,6 +48,18 @@ public class VictoryScreen {
         submitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         submitButton.setBounds(250, 90, 120, 30);
         frame.add(submitButton);
+
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                String name = nameTextField.getText().trim();
+                if (name.isEmpty() || name.equals("Enter your name...")) {
+                    name = VictoryScreen.this.player.getGeneratedName();
+                    System.out.println("You entered: " + name);
+                } else {
+                    System.out.println("You entered: " + name);
+                }
+            }
+        });
 
         frame.setVisible(true);
     }

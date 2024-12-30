@@ -4,11 +4,12 @@ public class Player {
     private final Random random = new Random();
     private String name;
 
-    public void setName() {
-        this.name = String.format("Guest-%d", this.random.nextInt(900) + 100);
+    private void generateNewName() {
+        this.name = String.format("Guest%d", this.random.nextInt(9000) + 1000);
     }
 
-    public String getName() {
+    public String getGeneratedName() {
+        this.generateNewName();
         return this.name;
     }
 }

@@ -1,6 +1,6 @@
 public class Grid {
     private final int[][] solvedSudoku = new int[9][9];
-    private int[][] playersSudoku = new int[9][9];
+    private final int[][] playersSudoku = new int[9][9];
 
 
     public int getCorrectValue(int row, int col) {

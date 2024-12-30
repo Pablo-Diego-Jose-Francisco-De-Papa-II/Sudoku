@@ -1,6 +1,17 @@
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.BorderFactory;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import java.awt.Font;
+import java.awt.Color;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Scanner;
 
 public class Leaderboard {
     public void setUpGUI() {
@@ -45,29 +56,61 @@ public class Leaderboard {
         testButton.setBounds(291, 60, 84, 30); // 375
         frame.add(testButton);
 
+
+
         String[] columns = {"#", "Name", "Time"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
 
         JTable table = new JTable(tableModel);
         table.setFont(new Font("Arial", Font.PLAIN, 12));
+        table.setSelectionBackground(Color.lightGray);
         table.setRowHeight(25);
 
-        tableModel.addRow(new Object[]{1, "Player 1", "1:30"});
-        tableModel.addRow(new Object[]{2, "Player 2", "2:00"});
-        tableModel.addRow(new Object[]{3, "Player 3", "2:30"});
-        tableModel.addRow(new Object[]{4, "Player 3", "2:30"});
-        tableModel.addRow(new Object[]{5, "Player 3", "2:30"});
-        tableModel.addRow(new Object[]{6, "Player 3", "2:30"});
-        tableModel.addRow(new Object[]{7, "Player 3", "2:30"});
-        tableModel.addRow(new Object[]{8, "Player 3", "2:30"});
-        tableModel.addRow(new Object[]{9, "Player 3", "2:30"});
-        tableModel.addRow(new Object[]{10, "Player 3", "2:30"});
-
-
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(10, 100, 365, 273);
+        scrollPane.setBounds(10, 100, 366, 273);
         frame.add(scrollPane);
 
+        easyButton.addActionListener(e -> this.loadLeaderboardData(tableModel, "Easy"));
+        mediumButton.addActionListener(e -> this.loadLeaderboardData(tableModel, "Medium"));
+        hardButton.addActionListener(e -> this.loadLeaderboardData(tableModel, "Hard"));
+        testButton.addActionListener(e -> this.loadLeaderboardData(tableModel, "Test"));
+
         frame.setVisible(true);
+    }
+
+    private void loadLeaderboardData(DefaultTableModel tableModel, String difficulty) {
+        tableModel.setRowCount(0);
+        ArrayList<String[]> players = new ArrayList<>();
+
+        try {
+            Scanner scanner = new Scanner(new File("leaderboard.txt"));
+            String[] line;
+
+            while (scanner.hasNextLine()) {
+                line = scanner.nextLine().split(",");
+
+                if (line[1].equals(difficulty)) {
+                    players.add(new String[]{line[0], line[2]});
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        players.sort(Comparator.comparingInt(p -> Integer.parseInt(p[1])));
+
+        for (int i = 0; i < 10; i++) {
+            tableModel.addRow(new Object[]{i + 1, players.get(i)[0], this.convertTime(Integer.parseInt(players.get(i)[1]))});
+        }
+    }
+
+    private String convertTime(int totalSeconds) {
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    public static void main(String[] args) {
+        new Leaderboard().setUpGUI();
     }
 }
