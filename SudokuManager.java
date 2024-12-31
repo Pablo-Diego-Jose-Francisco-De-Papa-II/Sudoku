@@ -147,6 +147,7 @@ public class SudokuManager  {
      * @param difficulty Obtiaznosť hry, ktorá určuje počet odstránených políčok.
      */
     public void generateSudoku(Difficulty difficulty) {
+        this.grid.resetSudoku();
         this.solve(this.grid.getPlayersSudoku()); // Vygenerovanie vyriešeného sudoku.
         this.removeTiles(difficulty); // Odstránenie n-počet políčok.
     }

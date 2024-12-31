@@ -30,7 +30,7 @@ public class SudokuGame {
     public SudokuGame(Grid grid) {
         SudokuGame.grid = grid;
         SudokuGame.sudokuManager = new SudokuManager(grid);
-        SudokuGame.sudokuManager.generateSudoku(Difficulty.EASY);
+        SudokuGame.sudokuManager.generateSudoku(Difficulty.MEDIUM);
         SudokuGame.leaderboard = new Leaderboard();
         SudokuGame.victoryScreen = new VictoryScreen();
     }
@@ -79,19 +79,19 @@ public class SudokuGame {
 
         JMenuItem easyItem = new JMenuItem("EASY");
         difficultyMenu.add(easyItem);
-        easyItem.addActionListener(e -> startNewGame(Difficulty.EASY));
+        easyItem.addActionListener(e -> this.startNewGame(Difficulty.EASY));
 
         JMenuItem mediumItem = new JMenuItem("MEDIUM");
         difficultyMenu.add(mediumItem);
-        mediumItem.addActionListener(e -> startNewGame(Difficulty.MEDIUM));
+        mediumItem.addActionListener(e -> this.startNewGame(Difficulty.MEDIUM));
 
         JMenuItem hardItem = new JMenuItem("HARD");
         difficultyMenu.add(hardItem);
-        hardItem.addActionListener(e -> startNewGame(Difficulty.HARD));
+        hardItem.addActionListener(e -> this.startNewGame(Difficulty.HARD));
 
         JMenuItem testItem = new JMenuItem("TEST");
         difficultyMenu.add(testItem);
-        testItem.addActionListener(e -> startNewGame(Difficulty.TEST));
+        testItem.addActionListener(e -> this.startNewGame(Difficulty.TEST));
 
 
 
@@ -122,7 +122,7 @@ public class SudokuGame {
     private void startNewGame(Difficulty difficulty) {
         this.numberOfHints = 5;
         sudokuManager.generateSudoku(difficulty);
-        refreshGUI(gridPanel);
+        this.refreshGUI(this.gridPanel);
         JOptionPane.showMessageDialog(null, "New game generated! \nDifficulty: " + difficulty);
     }
 
@@ -168,7 +168,7 @@ public class SudokuGame {
     public void validatePlacement(int row, int col, int input, JTextField cell) {
         grid.getPlayersSudoku()[row][col] = input;
 
-        if (grid.getSolvedSudoku()[row][col] == input)  {
+        if (grid.getCorrectValue(row, col) == input)  {
             cell.setBackground(Color.WHITE);
         } else {
             cell.setBackground(Color.RED);
@@ -192,7 +192,7 @@ public class SudokuGame {
             int y = random.nextInt(9);
 
             if (grid.getPlayersSudoku()[x][y] == 0) {
-                grid.getPlayersSudoku()[x][y] = grid.getSolvedSudoku()[x][y];
+                grid.getPlayersSudoku()[x][y] = grid.getCorrectValue(x, y);
                 this.numberOfHints--;
                 System.out.println("Hint provided. " + this.numberOfHints + " hints left.");
                 return;

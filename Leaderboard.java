@@ -1,4 +1,9 @@
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.BorderFactory;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.table.DefaultTableModel;
@@ -32,46 +37,30 @@ public class Leaderboard {
         title.setFont(new Font("Arial", Font.BOLD, 40));
         frame.add(title);
 
-        // 4 buttons pre výber
-        JButton easyButton = new JButton("EASY");
-        easyButton.setFont(new Font("Arial", Font.BOLD, 15));
-        easyButton.setBackground(Color.lightGray);
-        easyButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-        easyButton.setBounds(10, 60, 84, 30);
+        // Tlačidlá pre výber úrovne obtiažnosti.
+        JButton easyButton = this.createButton("EASY", 10);
+        JButton mediumButton = this.createButton("MEDIUM", 104);
+        JButton hardButton = this.createButton("HARD", 198);
+        JButton testButton = this.createButton("TEST", 291);
+
+        // Pridanie tlačidiel do okna.
         frame.add(easyButton);
-
-        JButton mediumButton = new JButton("MEDIUM");
-        mediumButton.setFont(new Font("Arial", Font.BOLD, 15));
-        mediumButton.setBackground(Color.lightGray);
-        mediumButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-        mediumButton.setBounds(104, 60, 84, 30);
         frame.add(mediumButton);
-
-        JButton hardButton = new JButton("HARD");
-        hardButton.setFont(new Font("Arial", Font.BOLD, 15));
-        hardButton.setBackground(Color.lightGray);
-        hardButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-        hardButton.setBounds(198, 60, 84, 30);
         frame.add(hardButton);
-
-        JButton testButton = new JButton("TEST");
-        testButton.setFont(new Font("Arial", Font.BOLD, 15));
-        testButton.setBackground(Color.lightGray);
-        testButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-        testButton.setBounds(291, 60, 84, 30); // 375
         frame.add(testButton);
 
-
-
+        // Nastavenie názvov stĺpcov tabuľky.
         String[] columns = {"#", "Name", "Time"};
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0);
 
+        // Vytvorenie tabuľky a nastavenie jej vlastností.
         JTable table = new JTable(tableModel);
         table.setFont(new Font("Arial", Font.PLAIN, 12));
         table.setSelectionBackground(Color.lightGray);
-        table.setDefaultEditor(Object.class, null);
+        table.setDefaultEditor(Object.class, null); // Zablokovanie úprav bunkám.
         table.setRowHeight(25);
 
+        // Pridanie tabuľky do okna
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(10, 100, 366, 273);
         frame.add(scrollPane);
@@ -98,7 +87,7 @@ public class Leaderboard {
 
         try {
             // Načítanie dát zo súboru "leaderboard.txt"
-            Scanner scanner = new Scanner(new File("leaderboard.txty"));
+            Scanner scanner = new Scanner(new File("leaderboard.txt"));
             String[] line;
 
             // Spracovanie každého riadku v súbore.
@@ -121,6 +110,22 @@ public class Leaderboard {
         for (int i = 0; i < 10; i++) {
             tableModel.addRow(new Object[]{i + 1, players.get(i)[0], this.convertTime(Integer.parseInt(players.get(i)[1]))});
         }
+    }
+
+    /**
+     * Vytvorenie tlačidla pre výber obtiažnosti.
+     *
+     * @param text Nápis v tlačidle.
+     * @param x Pozícia na osi x.
+     * @return Vytvorené tlačidlo.
+     */
+    private JButton createButton(String text, int x) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.BOLD, 15));
+        button.setBackground(Color.lightGray);
+        button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+        button.setBounds(x, 60, 84, 30);
+        return button;
     }
 
     /**
