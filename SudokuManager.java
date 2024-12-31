@@ -88,16 +88,16 @@ public class SudokuManager  {
                     playersSudoku[x][y] = savedValue; // Vráti hodnotu naspäť.
                 } else {
                     count--; // Políčko bolo úspešne odstránené.
-                    this.grid.setFixed(x, y, true); // Nastaví, že políčko je pevné.
+                    this.grid.setFixed(x, y, false); // Nastaví, že políčko je prázdne.
                 }
             }
         }
 
-        // Nastaví true do listu isFixed, ak je políčko prázdne.
+        // Nastaví true do listu isFixed, ak je políčko pevné.
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 if (this.grid.getPlayersValue(row, col) != 0) {
-                    this.grid.setFixed(row, col, false);
+                    this.grid.setFixed(row, col, true);
                 }
             }
         }

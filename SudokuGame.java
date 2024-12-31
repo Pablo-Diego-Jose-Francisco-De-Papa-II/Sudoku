@@ -108,7 +108,8 @@ public class SudokuGame {
 
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
-                JTextField cell = this.createCell(row, col, grid.getPlayersSudoku()[row][col]);
+                JTextField cell = new JTextField();
+                setupCell(cell, row, col, grid.getPlayersSudoku()[row][col], grid.isFixed(row, col));
                 this.gridPanel.add(cell);
             }
         }
@@ -124,30 +125,52 @@ public class SudokuGame {
         JOptionPane.showMessageDialog(null, "New game generated! \nDifficulty: " + difficulty);
     }
 
-    private JTextField createCell(int row, int col, int value) {
-        JTextField cell = new JTextField();
+    private void setupCell(JTextField cell, int row, int col, int value, boolean isFixed) {
         cell.setHorizontalAlignment(SwingConstants.CENTER);
         cell.setFont(new Font("Arial", Font.BOLD, 30));
         cell.setBorder(this.createCellBorder(row, col));
 
-        if (value != 0) {
+        if (isFixed) {
             cell.setText(String.valueOf(value));
             cell.setBackground(Color.LIGHT_GRAY);
             cell.setEditable(false);
         } else {
+            cell.setText(value != 0 ? String.valueOf(value) : "");
+            cell.setBackground(Color.WHITE);
+            cell.setEditable(true);
+
             cell.addActionListener(ae -> {
                 try {
                     int input = Integer.parseInt(cell.getText());
-                    SudokuGame.this.validatePlacement(row, col, input, cell);
 
-                } catch (Exception e) {
+                    if (input >= 1 && input <= 9) {
+                        SudokuGame.this.validatePlacement(row, col, input, cell);
+                    } else {
+                        cell.setText("");
+                        cell.setBackground(Color.WHITE);
+                    }
+                } catch (NumberFormatException e) {
                     cell.setText("");
                     cell.setBackground(Color.WHITE);
                 }
             });
         }
+    }
 
-        return cell;
+    public void validatePlacement(int row, int col, int input, JTextField cell) {
+        grid.getPlayersSudoku()[row][col] = input;
+
+        if (!grid.isFixed(row, col)) {
+            if (grid.getCorrectValue(row, col) == input)  {
+                cell.setBackground(Color.WHITE);
+            } else {
+                cell.setBackground(Color.RED);
+            }
+        }
+
+        if (this.isSolved()) {
+            victoryScreen.setUpGui();
+        }
     }
 
     private Border createCellBorder(int row, int col) {
@@ -158,20 +181,6 @@ public class SudokuGame {
                 col % 3 == 2 ? 3 : 1, // RIGHT
                 Color.BLACK
         );
-    }
-
-    public void validatePlacement(int row, int col, int input, JTextField cell) {
-        grid.getPlayersSudoku()[row][col] = input;
-
-        if (grid.getCorrectValue(row, col) == input)  {
-            cell.setBackground(Color.WHITE);
-        } else {
-            cell.setBackground(Color.RED);
-        }
-
-        if (this.isSolved()) {
-            victoryScreen.setUpGui();
-        }
     }
 
     private void getHint() {
@@ -199,6 +208,7 @@ public class SudokuGame {
             }
         }
     }
+
     private boolean isSolved() {
         return Arrays.deepEquals(grid.getPlayersSudoku(), grid.getSolvedSudoku());
     }
@@ -212,15 +222,7 @@ public class SudokuGame {
                 int col = i % 9;
                 int value = grid.getPlayersSudoku()[row][col];
 
-                if (!grid.isFixed(row, col)) {
-                    cell.setText(value != 0 ? String.valueOf(value) : "");
-                    cell.setEditable(false);
-                    cell.setBackground(Color.LIGHT_GRAY);
-                } else {
-                    cell.setText(value != 0 ? String.valueOf(value) : "");
-                    cell.setEditable(true);
-                    cell.setBackground(Color.WHITE);
-                }
+                setupCell(cell, row, col, value, grid.isFixed(row, col));
             }
         }
     }
