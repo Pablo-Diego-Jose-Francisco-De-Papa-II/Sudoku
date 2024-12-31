@@ -56,7 +56,7 @@ public class Leaderboard {
         // Vytvorenie tabuľky a nastavenie jej vlastností.
         JTable table = new JTable(tableModel);
         table.setFont(new Font("Arial", Font.PLAIN, 12));
-        table.setSelectionBackground(Color.lightGray);
+        table.setSelectionBackground(Color.LIGHT_GRAY);
         table.setDefaultEditor(Object.class, null); // Zablokovanie úprav bunkám.
         table.setRowHeight(25);
 
@@ -122,7 +122,7 @@ public class Leaderboard {
     private JButton createButton(String text, int x) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.BOLD, 15));
-        button.setBackground(Color.lightGray);
+        button.setBackground(Color.LIGHT_GRAY);
         button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
         button.setBounds(x, 60, 84, 30);
         return button;

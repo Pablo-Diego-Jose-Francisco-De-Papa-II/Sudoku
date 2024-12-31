@@ -1,6 +1,4 @@
 import javax.swing.border.Border;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Random;
 import java.awt.Font;
@@ -51,7 +49,7 @@ public class SudokuGame {
         // Tlačidlá na vrchu
         JButton hintButton = new JButton("HINT");
         hintButton.setFont(new Font("Arial", Font.BOLD, 15));
-        hintButton.setBackground(Color.lightGray);
+        hintButton.setBackground(Color.LIGHT_GRAY);
         hintButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
         hintButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         hintButton.setBounds(10, 0, 134, 50);
@@ -59,7 +57,7 @@ public class SudokuGame {
 
         JButton solveButton = new JButton("SOLVE");
         solveButton.setFont(new Font("Arial", Font.BOLD, 15));
-        solveButton.setBackground(Color.lightGray);
+        solveButton.setBackground(Color.LIGHT_GRAY);
         solveButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
         solveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         solveButton.setBounds(154, 0, 134, 50);
@@ -67,7 +65,7 @@ public class SudokuGame {
 
         JButton newGameButton = new JButton("NEW GAME");
         newGameButton.setFont(new Font("Arial", Font.BOLD, 15));
-        newGameButton.setBackground(Color.lightGray);
+        newGameButton.setBackground(Color.LIGHT_GRAY);
         newGameButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
         newGameButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         newGameButton.setBounds(298, 0, 134, 50);
@@ -97,7 +95,7 @@ public class SudokuGame {
 
         JButton leaderboardButton = new JButton("LEADERBOARD");
         leaderboardButton.setFont(new Font("Arial", Font.BOLD, 15));
-        leaderboardButton.setBackground(Color.lightGray);
+        leaderboardButton.setBackground(Color.LIGHT_GRAY);
         leaderboardButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
         leaderboardButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         leaderboardButton.setBounds(442, 0, 134, 50);
@@ -134,20 +132,17 @@ public class SudokuGame {
 
         if (value != 0) {
             cell.setText(String.valueOf(value));
-            cell.setBackground(Color.lightGray);
+            cell.setBackground(Color.LIGHT_GRAY);
             cell.setEditable(false);
         } else {
-            cell.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent ae) {
-                    try {
-                        int input = Integer.parseInt(cell.getText());
-                        SudokuGame.this.validatePlacement(row, col, input, cell);
+            cell.addActionListener(ae -> {
+                try {
+                    int input = Integer.parseInt(cell.getText());
+                    SudokuGame.this.validatePlacement(row, col, input, cell);
 
-                    } catch (Exception e) {
-                        cell.setText("");
-                        cell.setBackground(Color.WHITE);
-                    }
+                } catch (Exception e) {
+                    cell.setText("");
+                    cell.setBackground(Color.WHITE);
                 }
             });
         }
@@ -212,18 +207,17 @@ public class SudokuGame {
         Component[] components = gridPanel.getComponents();
 
         for (int i = 0; i < components.length; i++) {
-            if (components[i] instanceof JTextField) {
-                JTextField cell = (JTextField)components[i];
+            if (components[i] instanceof JTextField cell) {
                 int row = i / 9;
                 int col = i % 9;
                 int value = grid.getPlayersSudoku()[row][col];
 
-                if (value != 0) {
-                    cell.setText(String.valueOf(value));
-
-
+                if (!grid.isFixed(row, col)) {
+                    cell.setText(value != 0 ? String.valueOf(value) : "");
+                    cell.setEditable(false);
+                    cell.setBackground(Color.LIGHT_GRAY);
                 } else {
-                    cell.setText("");
+                    cell.setText(value != 0 ? String.valueOf(value) : "");
                     cell.setEditable(true);
                     cell.setBackground(Color.WHITE);
                 }
@@ -232,18 +226,14 @@ public class SudokuGame {
     }
 
     public void setUpButtonListeners(JButton hintButton, JButton solveButton, JButton newGameButton, JButton leaderboardButton, JPopupMenu difficultyMenu) {
-        hintButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                SudokuGame.this.getHint();
-                SudokuGame.this.refreshGUI(SudokuGame.this.gridPanel);
-            }
+        hintButton.addActionListener(ae -> {
+            SudokuGame.this.getHint();
+            SudokuGame.this.refreshGUI(SudokuGame.this.gridPanel);
         });
 
-        solveButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                sudokuManager.solve(grid.getPlayersSudoku());
-                SudokuGame.this.refreshGUI(SudokuGame.this.gridPanel);
-            }
+        solveButton.addActionListener(ae -> {
+            sudokuManager.solve(grid.getPlayersSudoku());
+            SudokuGame.this.refreshGUI(SudokuGame.this.gridPanel);
         });
 
         newGameButton.addActionListener(ae -> difficultyMenu.show(newGameButton, 0, newGameButton.getHeight()));

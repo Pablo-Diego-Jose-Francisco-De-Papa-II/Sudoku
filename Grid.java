@@ -5,6 +5,7 @@
 public class Grid {
     private int[][] solvedSudoku = new int[9][9];
     private int[][] playersSudoku = new int[9][9];
+    private boolean[][] isFixed = new boolean[9][9];
 
     /**
      * Získa správnu hodnotu z vyriešeného sudoku pre daný riadok a stĺpec.
@@ -78,5 +79,29 @@ public class Grid {
     public void resetSudoku() {
         this.playersSudoku = new int[9][9];
         this.solvedSudoku = new int[9][9];
+        this.isFixed = new boolean[9][9];
     }
+
+    /**
+     * Nastaví, či je dané políčko v sudoku mriežke fixné.
+     *
+     * @param row Riadok, s ktorým pracujeme.
+     * @param col Stĺpec, s ktorým pracujeme.
+     * @param fixed Určuje, či je políčko fixné.
+     */
+    public void setFixed(int row, int col, boolean fixed) {
+        this.isFixed[row][col] = fixed;
+    }
+
+    /**
+     * Zistí, či je dané políčko v sudoku mriežke fixné.
+     *
+     * @param row Riadok, z ktorého sa hodnota získava.
+     * @param col Stĺpec, z ktorého sa hodnota získava.
+     * @return Vráti true, ak je políčko fixné.
+     */
+    public boolean isFixed(int row, int col) {
+        return this.isFixed[row][col];
+    }
+
 }

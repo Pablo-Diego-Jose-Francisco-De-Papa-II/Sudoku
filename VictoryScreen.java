@@ -43,7 +43,7 @@ public class VictoryScreen {
 
         JButton submitButton = new JButton("SUBMIT");
         submitButton.setFont(new Font("Arial", Font.BOLD, 20));
-        submitButton.setBackground(Color.lightGray);
+        submitButton.setBackground(Color.LIGHT_GRAY);
         submitButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
         submitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         submitButton.setBounds(250, 90, 120, 30);
