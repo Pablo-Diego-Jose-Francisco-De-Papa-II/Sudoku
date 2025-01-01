@@ -5,9 +5,9 @@ Tento projekt vám prináša kompletný Sudoku zážitok: od generovania náhodn
 ## 🔧 Inštalácia:
 
 1. Stiahnite si JAR súbor alebo klonujte tento repozitár.
-2. Pre spustenie použite príkaz:
-```java -jar sudoku.jar```
-3. Vychutnajte si hru!
+2. Pre spustenie stačí **dvojitý klik** na súbor `sudoku.jar`
+   alebo použite príkaz: ```java -jar sudoku.jar```
+4. Vychutnajte si hru!
 ## 🧩 Funkcie:
 
 - Generovanie Sudoku hádaniek
