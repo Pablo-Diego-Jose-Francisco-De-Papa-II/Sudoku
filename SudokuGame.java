@@ -25,6 +25,7 @@ public class SudokuGame {
 
     private JPanel gridPanel;
     private int numberOfHints = 5;
+    private boolean gameWon = false;
 
     public SudokuGame(Grid grid) {
         SudokuGame.grid = grid;
@@ -33,13 +34,8 @@ public class SudokuGame {
         SudokuGame.leaderboard = new Leaderboard();
         SudokuGame.player = new Player();
         SudokuGame.victoryScreen = new VictoryScreen(SudokuGame.player);
-        player.setDifficulty(Difficulty.MEDIUM);
-    }
-
-    public static void main(String[] args) {
-        SudokuGame game = new SudokuGame(new Grid());
-        game.setUpGUI();
         player.startTimer();
+        player.setDifficulty(Difficulty.MEDIUM);
     }
 
     public void setUpGUI() {
@@ -174,7 +170,8 @@ public class SudokuGame {
             }
         }
 
-        if (this.isSolved()) {
+        if (this.isSolved() && !this.gameWon) {
+            this.gameWon = true;
             player.endTimer();
             victoryScreen.setUpGui();
         }
