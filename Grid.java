@@ -74,15 +74,6 @@ public class Grid {
     }
 
     /**
-     * Resetuje obe mriežky na 2 prázdne 2D polia.
-     */
-    public void resetSudoku() {
-        this.playersSudoku = new int[9][9];
-        this.solvedSudoku = new int[9][9];
-        this.isFixed = new boolean[9][9];
-    }
-
-    /**
      * Nastaví, či je dané políčko v sudoku mriežke fixné.
      *
      * @param row Riadok, s ktorým pracujeme.
@@ -104,24 +95,12 @@ public class Grid {
         return this.isFixed[row][col];
     }
 
-    public void printIsFixed() {
-        for (int row = 0; row < isFixed.length; row++) {
-            // Vloží vodorovnú čiaru po každom 3. riadku.
-            if (row % 3 == 0 && row != 0) {
-                System.out.println("---------------------");
-            }
-
-            for (int col = 0; col < isFixed[row].length; col++) {
-                // Vytlačí hodnotu na daných súradniciach.
-                System.out.print(isFixed[row][col] + " ");
-
-                // Vloží zvislú čiaru po každom 3. stĺpci.
-                if ((col + 1) % 3 == 0 && col != 8) {
-                    System.out.print("| ");
-                }
-            }
-            // Prejde na nový riadok.
-            System.out.println();
-        }
+    /**
+     * Resetuje obe mriežky na 2 prázdne 2D polia.
+     */
+    public void resetSudoku() {
+        this.playersSudoku = new int[9][9];
+        this.solvedSudoku = new int[9][9];
+        this.isFixed = new boolean[9][9];
     }
 }

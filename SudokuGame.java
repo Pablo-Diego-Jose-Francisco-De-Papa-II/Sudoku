@@ -21,6 +21,7 @@ public class SudokuGame {
     private static SudokuManager sudokuManager;
     private static Leaderboard leaderboard;
     private static VictoryScreen victoryScreen;
+    private static Player player;
 
     private JPanel gridPanel;
     private int numberOfHints = 5;
@@ -30,12 +31,15 @@ public class SudokuGame {
         SudokuGame.sudokuManager = new SudokuManager(grid);
         SudokuGame.sudokuManager.generateSudoku(Difficulty.MEDIUM);
         SudokuGame.leaderboard = new Leaderboard();
-        SudokuGame.victoryScreen = new VictoryScreen();
+        SudokuGame.player = new Player();
+        SudokuGame.victoryScreen = new VictoryScreen(SudokuGame.player);
+        player.setDifficulty(Difficulty.MEDIUM);
     }
 
     public static void main(String[] args) {
         SudokuGame game = new SudokuGame(new Grid());
         game.setUpGUI();
+        player.startTimer();
     }
 
     public void setUpGUI() {
@@ -109,7 +113,7 @@ public class SudokuGame {
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 JTextField cell = new JTextField();
-                setupCell(cell, row, col, grid.getPlayersSudoku()[row][col], grid.isFixed(row, col));
+                this.setupCell(cell, row, col, grid.getPlayersSudoku()[row][col], grid.isFixed(row, col));
                 this.gridPanel.add(cell);
             }
         }
@@ -121,7 +125,9 @@ public class SudokuGame {
     private void startNewGame(Difficulty difficulty) {
         this.numberOfHints = 5;
         sudokuManager.generateSudoku(difficulty);
+        player.setDifficulty(difficulty);
         this.refreshGUI(this.gridPanel);
+        player.startTimer();
         JOptionPane.showMessageDialog(null, "New game generated! \nDifficulty: " + difficulty);
     }
 
@@ -169,6 +175,7 @@ public class SudokuGame {
         }
 
         if (this.isSolved()) {
+            player.endTimer();
             victoryScreen.setUpGui();
         }
     }
@@ -222,7 +229,7 @@ public class SudokuGame {
                 int col = i % 9;
                 int value = grid.getPlayersSudoku()[row][col];
 
-                setupCell(cell, row, col, value, grid.isFixed(row, col));
+                this.setupCell(cell, row, col, value, grid.isFixed(row, col));
             }
         }
     }

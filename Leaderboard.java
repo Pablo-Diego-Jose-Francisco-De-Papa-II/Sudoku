@@ -66,10 +66,10 @@ public class Leaderboard {
         frame.add(scrollPane);
 
         // Akcie pre tlačidlá, ktoré načítajú dáta podľa zvolenej obtiažnosti.
-        easyButton.addActionListener(e -> this.loadLeaderboardData(tableModel, "Easy"));
-        mediumButton.addActionListener(e -> this.loadLeaderboardData(tableModel, "Medium"));
-        hardButton.addActionListener(e -> this.loadLeaderboardData(tableModel, "Hard"));
-        testButton.addActionListener(e -> this.loadLeaderboardData(tableModel, "Test"));
+        easyButton.addActionListener(e -> this.loadLeaderboardData(tableModel, "EASY"));
+        mediumButton.addActionListener(e -> this.loadLeaderboardData(tableModel, "MEDIUM"));
+        hardButton.addActionListener(e -> this.loadLeaderboardData(tableModel, "HARD"));
+        testButton.addActionListener(e -> this.loadLeaderboardData(tableModel, "TEST"));
 
         // Zobrazenie okna.
         frame.setVisible(true);
