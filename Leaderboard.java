@@ -109,7 +109,7 @@ public class Leaderboard {
         players.sort(Comparator.comparingInt(p -> Integer.parseInt(p[1])));
 
         // Pridanie prvých 10 hráčov do tabuľky.
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < Math.min(10, players.size()); i++) {
             tableModel.addRow(new Object[]{i + 1, players.get(i)[0], this.convertTime(Integer.parseInt(players.get(i)[1]))});
         }
     }
